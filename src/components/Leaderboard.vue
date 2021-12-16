@@ -39,6 +39,14 @@
             max-height="23"
             :src="require('@/assets/home/location.svg')"
           />
+          <v-img
+            slot="append"
+            max-width="8"
+            max-height="24"
+            height="24"
+            contain
+            :src="require('@/assets/home/arrowdown.svg')"
+          />
         </v-select>
       </v-col>
     </v-row>
