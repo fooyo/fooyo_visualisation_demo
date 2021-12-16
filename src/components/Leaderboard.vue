@@ -42,6 +42,22 @@
         </v-select>
       </v-col>
     </v-row>
+
+    <v-row no-gutters class="th">
+      <v-col cols="2">No.</v-col>
+      <v-col cols="3">Name</v-col>
+      <v-col cols="2">Items</v-col>
+      <v-col cols="3">Distance</v-col>
+      <v-col cols="2">Time</v-col>
+    </v-row>
+    <v-row no-gutters class="tr">
+      <v-col cols="2">1</v-col>
+      <v-col cols="3">2</v-col>
+      <v-col cols="2">2</v-col>
+      <v-col cols="3">2</v-col>
+      <v-col cols="2">2</v-col>
+    </v-row>
+
     <!-- <v-tabs-items v-model="tab">
       <v-tab-item v-for="item in items" :key="item">
         <v-card flat>
@@ -73,6 +89,7 @@ export default {
   font-weight: 500;
 }
 .lb-wrap {
+  padding-bottom: 20px;
   ::v-deep {
     .v-tabs-slider-wrapper {
       display: flex;
@@ -134,6 +151,23 @@ export default {
       background: linear-gradient(to right, #dff15a, rgba(198, 238, 142, 1));
       color: #163223;
     }
+  }
+}
+
+.th {
+  color: #1d211f;
+  font-weight: 500;
+  margin-top: 20px;
+  padding: 0 20px;
+}
+.tr {
+  padding: 0 20px;
+  margin-top: 24px;
+  &:first-child {
+    margin-top: 15px;
+  }
+  .col:first-child {
+    font-weight: bold;
   }
 }
 </style>
