@@ -1,36 +1,17 @@
 <template>
   <v-app>
-    <v-app-bar app color="primary" dark>
-      <div class="d-flex align-center">
-        <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-          transition="scale-transition"
-          width="40"
-        />
-
-        <v-img
-          alt="Vuetify Name"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
-        />
-      </div>
-
-      <v-spacer></v-spacer>
-
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
+    <v-app-bar fixed height="88" light app color="#fff" elevation="0">
+      <v-img
+        max-width="50"
+        max-height="39"
+        class="logo"
+        :src="require('./assets/logo.svg')"
+      />
+      <v-toolbar-title class="title"
+        >Community Impact Dashboard</v-toolbar-title
       >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
-      </v-btn>
+      <v-spacer></v-spacer>
+      <v-toolbar-title class="sub-title">A cleaner way to move</v-toolbar-title>
     </v-app-bar>
 
     <v-main>
@@ -48,3 +29,15 @@ export default {
   }),
 };
 </script>
+<style lang="scss" scoped>
+.logo {
+  margin-right: 30px;
+}
+.title {
+  font-weight: bold;
+  font-size: 20px;
+}
+.sub-title {
+  font-size: 16px;
+}
+</style>
