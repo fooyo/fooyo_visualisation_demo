@@ -1,10 +1,12 @@
 <template>
   <v-container fluid>
     <v-row no-gutters>
-      <v-col cols="8" sm="6" md="7" lg="8">
-        <v-card elevation="0" class="left-card">1212</v-card>
+      <v-col cols="12" class="h-col" sm="6" md="7" lg="8" xl="8">
+        <v-card elevation="0" class="left-card">
+          <left-board />
+        </v-card>
       </v-col>
-      <v-col cols="4" sm="6" md="5" lg="4">
+      <v-col cols="12" class="h-col" sm="6" md="5" lg="4" xl="4">
         <v-card elevation="0">
           <count-stats />
         </v-card>
@@ -20,17 +22,20 @@
 <script>
 import CountStats from "../components/CountStats.vue";
 import Leaderboard from "../components/Leaderboard.vue";
+import LeftBoard from "../components/LeftBoard.vue";
+
 export default {
   name: "Home",
   components: {
     CountStats,
     Leaderboard,
+    LeftBoard,
   },
 };
 </script>
 <style lang="scss" scoped>
 .container {
-  padding: 25px;
+  padding: 15px;
 }
 ::v-deep {
   .v-toolbar__content {
@@ -41,8 +46,10 @@ export default {
   }
 }
 .left-card {
-  height: 100%;
-  margin-right: 20px;
+  // height: 100%;
+}
+.h-col {
+  padding: 10px !important;
 }
 .spacer {
   height: 20px;
