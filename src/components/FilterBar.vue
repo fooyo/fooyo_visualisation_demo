@@ -1,5 +1,5 @@
 <template>
-  <v-row>
+  <v-row no-gutters>
     <v-col cols="12">
       <v-row no-gutters>
         <v-col cols="12" sm="12" md="6" lg="5" xl="3">
@@ -86,9 +86,6 @@
           Download Data
         </v-btn>
       </v-row>
-    </v-col>
-    <v-col cols="12">
-      <v-row> </v-row>
     </v-col>
   </v-row>
 </template>
