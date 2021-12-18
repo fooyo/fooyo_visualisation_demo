@@ -36,7 +36,7 @@ export default {
         trigger: "item",
       },
       legend: {
-        bottom: "0%",
+        bottom: "1%",
         left: "center",
         itemWidth: 6,
         itemHeight: 6,

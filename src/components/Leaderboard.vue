@@ -82,8 +82,8 @@ export default {
       tab: "web",
       items: ["Individuals", "Groups"],
       timeMode: "today",
-      country: "",
-      countries: ["Sinapore", "China"],
+      country: "Worldwide",
+      countries: ["Worldwide", "China"],
     };
   },
 };
