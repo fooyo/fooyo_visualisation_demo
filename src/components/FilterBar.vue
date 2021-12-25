@@ -97,7 +97,7 @@ export default {
       dates: [dayjs().format("YYYY-MM-DD"), dayjs().format("YYYY-MM-DD")],
       menu: false,
       country: "Worldwide",
-      countries: ["Worldwide", "Singapo"],
+      countries: ["Worldwide", "Singapore"],
     };
   },
   computed: {
