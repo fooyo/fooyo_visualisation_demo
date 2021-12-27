@@ -8,7 +8,7 @@
       <v-col cols="auto">
         <v-tabs height="24" v-model="tab">
           <v-tabs-slider color="#DFF15A"></v-tabs-slider>
-          <v-tab v-for="item in items" :key="item">
+          <v-tab v-for="item in tabItems" :key="item">
             {{ item }}
           </v-tab>
         </v-tabs>
@@ -16,7 +16,7 @@
     </v-row>
     <v-row align="center" no-gutters class="lb-filter">
       <v-col cols="auto">
-        <v-chip-group v-model="timeMode" mandatory>
+        <v-chip-group @change="emitChange" v-model="timeMode" mandatory>
           <v-chip value="today"> Today </v-chip>
           <v-chip value="week"> This week </v-chip>
           <v-chip value="all"> All time </v-chip>
@@ -27,6 +27,7 @@
         <v-select
           full-width
           v-model="country"
+          @change="emitChange"
           :items="countries"
           menu-props="auto"
           label="Select"
@@ -58,33 +59,86 @@
       <v-col cols="3">Distance</v-col>
       <v-col cols="2">Time</v-col>
     </v-row>
-    <v-row no-gutters class="tr">
-      <v-col cols="2">1</v-col>
-      <v-col cols="3">2</v-col>
-      <v-col cols="2">2</v-col>
-      <v-col cols="3">2</v-col>
-      <v-col cols="2">2</v-col>
+    <v-row
+      v-for="(item, index) in displayList"
+      :key="index"
+      no-gutters
+      class="tr"
+    >
+      <v-col cols="2">{{ index + 1 }}</v-col>
+      <v-col cols="3">{{ item.name }}</v-col>
+      <v-col cols="2">{{ item.items_count }}</v-col>
+      <v-col cols="3">{{ item.distance }}</v-col>
+      <v-col cols="2">{{ item.time_in_minutes }}</v-col>
     </v-row>
-
-    <!-- <v-tabs-items v-model="tab">
-      <v-tab-item v-for="item in items" :key="item">
-        <v-card flat>
-          <v-card-text v-text="text"></v-card-text>
-        </v-card>
-      </v-tab-item>
-    </v-tabs-items> -->
   </div>
 </template>
 <script>
+import dayjs from "dayjs";
+import isoWeek from "dayjs/plugin/isoWeek";
+dayjs.extend(isoWeek);
+import request from "../utils/request";
+
 export default {
+  props: ["summary"],
   data() {
     return {
-      tab: "web",
-      items: ["Individuals", "Groups"],
+      tab: 0,
+      tabItems: ["Individuals", "Groups"],
       timeMode: "today",
       country: "Worldwide",
-      countries: ["Worldwide", "China"],
+      users: [],
+      teams: [],
     };
+  },
+  computed: {
+    displayList() {
+      if (this.tab === 0) {
+        return this.users;
+      }
+      return this.teams;
+    },
+    countries() {
+      return ["Worldwide"].concat(this.summary.countries);
+    },
+    dates() {
+      if (this.timeMode === "today") {
+        let date = dayjs().format("YYYY-MM-DD");
+        return [date, date];
+      }
+      if (this.timeMode === "week") {
+        return [
+          dayjs().isoWeekday(1).format("YYYY-MM-DD"),
+          dayjs().isoWeekday(7).format("YYYY-MM-DD"),
+        ];
+      }
+      return [];
+    },
+  },
+  mounted() {
+    this.loadData();
+  },
+  methods: {
+    emitChange() {
+      this.loadData();
+    },
+    async loadData() {
+      let params = {};
+      if (this.dates.length) {
+        params.start_date = this.dates[0];
+        params.end_date = this.dates[1];
+      }
+
+      if (this.country !== "Worldwide") {
+        params.country = this.country;
+      }
+
+      const { data } = await request.get("/dashboards/leaderboard", {
+        params,
+      });
+      this.users = data.users;
+      this.teams = data.teams;
+    },
   },
 };
 </script>
@@ -171,6 +225,11 @@ export default {
 .tr {
   padding: 0 20px;
   margin-top: 24px;
+  .col {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
   &:first-child {
     margin-top: 15px;
   }

@@ -10,7 +10,7 @@
             :src="require('@/assets/home/number.svg')"
           />
           <span class="stat-label">Number of Strides</span>
-          <span class="stat-num">110</span>
+          <span class="stat-num">{{ stats.total_strides }}</span>
         </v-row>
       </v-col>
       <v-col md="6" lg="4" sm="12" cols="12">
@@ -21,7 +21,7 @@
             :src="require('@/assets/home/loc.svg')"
           />
           <span class="stat-label">Total Distance</span>
-          <span class="stat-num">110</span>
+          <span class="stat-num">{{ stats.total_distance }}</span>
         </v-row>
       </v-col>
       <v-col md="6" lg="4" sm="12" cols="12">
@@ -32,14 +32,14 @@
             :src="require('@/assets/home/timer.svg')"
           />
           <span class="stat-label">Total Time</span>
-          <span class="stat-num">110</span>
+          <span class="stat-num">{{ stats.total_time_in_minutes }}</span>
         </v-row>
       </v-col>
     </v-row>
     <v-row no-gutters class="bottom-wrap">
-      <v-col cols="12" sm="12" md="5">
+      <v-col cols="12" sm="12" md="4" lg="5" xl="5">
         <v-row align="center" justify="center">
-          <pie-chart />
+          <pie-chart :items="stats.total_items" />
         </v-row>
       </v-col>
       <v-col
@@ -48,7 +48,9 @@
         ]"
         cols="12"
         sm="12"
-        md="7"
+        md="8"
+        lg="7"
+        xl="7"
       >
         <v-row no-gutters>
           <v-col
@@ -62,7 +64,7 @@
             lg="6"
           >
             <v-row
-              v-for="(item, index) in items.slice(0, 5)"
+              v-for="(item, index) in stats.total_items.slice(0, 6)"
               :key="index"
               no-gutters
               align="center"
@@ -74,16 +76,16 @@
                 width="30"
                 height="30"
                 contain
-                :src="require('@/assets/home/bag.svg')"
+                :src="item.image_url"
               />
-              <span class="stat-label">Bag</span>
+              <span class="stat-label">{{ item.name }}</span>
               <v-spacer />
-              <span class="stat-num">110</span>
+              <span class="stat-num">{{ item.value }}</span>
             </v-row>
           </v-col>
           <v-col cols="12" md="12" lg="6">
             <v-row
-              v-for="(item, index) in items.slice(5)"
+              v-for="(item, index) in stats.total_items.slice(6)"
               :key="index"
               no-gutters
               align="center"
@@ -102,11 +104,11 @@
                 width="30"
                 height="30"
                 contain
-                :src="require('@/assets/home/bag.svg')"
+                :src="item.image_url"
               />
-              <span class="stat-label">Bag</span>
+              <span class="stat-label">{{ item.name }}</span>
               <v-spacer />
-              <span class="stat-num">1000</span>
+              <span class="stat-num">{{ item.value }}</span>
             </v-row>
           </v-col>
         </v-row>
@@ -117,6 +119,7 @@
 <script>
 import PieChart from "./PieChart.vue";
 export default {
+  props: ["stats"],
   components: {
     PieChart,
   },
@@ -166,8 +169,9 @@ export default {
   font-weight: 500;
 }
 .stat-item {
-  padding: 0 50px;
+  padding: 0 45px;
   margin-top: 28px;
+
   &:first-child {
     margin-top: 0;
   }

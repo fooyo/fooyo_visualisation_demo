@@ -9,7 +9,7 @@
           max-height="92"
           :src="require('@/assets/home/leaf.svg')"
         />
-        <span class="cs-title">123456789</span>
+        <span class="cs-title">{{ summary.total_users }}</span>
         <span class="cs-caption">No. of Users Worldwide</span>
       </v-row>
     </v-col>
@@ -22,14 +22,16 @@
           height="92"
           :src="require('@/assets/home/world.svg')"
         />
-        <span class="cs-title">1122</span>
+        <span class="cs-title">{{ summary.total_countries }}</span>
         <span class="cs-caption">No. of Countries</span>
       </v-row>
     </v-col>
   </v-row>
 </template>
 <script>
-export default {};
+export default {
+  props: ["summary"],
+};
 </script>
 <style lang="scss" scoped>
 .col {

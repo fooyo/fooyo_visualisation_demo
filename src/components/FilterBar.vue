@@ -56,6 +56,7 @@
             label="Select"
             hide-details
             single-line
+            @change="emitChange"
             class="country-select"
           >
             <v-img
@@ -76,7 +77,12 @@
         </v-col>
 
         <v-spacer />
-        <v-btn elevation="0" class="download-btn" :translate="false">
+        <v-btn
+          @click="onDownload"
+          elevation="0"
+          class="download-btn"
+          :translate="false"
+        >
           <v-img
             max-width="12"
             max-height="11"
@@ -91,18 +97,23 @@
 </template>
 <script>
 import dayjs from "dayjs";
+import request from "../utils/request";
+
 export default {
+  props: ["summary"],
   data() {
     return {
       dates: [dayjs().format("YYYY-MM-DD"), dayjs().format("YYYY-MM-DD")],
       menu: false,
       country: "Worldwide",
-      countries: ["Worldwide", "Singapore"],
     };
   },
   computed: {
     dateRangeText() {
       return this.dates.join("    ~    ");
+    },
+    countries() {
+      return ["Worldwide"].concat(this.summary.countries);
     },
   },
   methods: {
@@ -110,7 +121,40 @@ export default {
       if (this.dates.length === 1) {
         this.dates.push(this.dates[0]);
       }
+      this.emitChange();
       this.$refs.menu.save(this.dates);
+    },
+    emitChange() {
+      this.$emit("change", {
+        start_date: this.dates[0],
+        end_date: this.dates[1],
+        country: this.country !== "Worldwide" ? this.country : "",
+      });
+    },
+    async onDownload() {
+      const { data: blob } = await request.get("/dashboards/strides", {
+        params: {
+          start_date: this.dates[0],
+          end_date: this.dates[1],
+          country: this.country !== "Worldwide" ? this.country : "",
+        },
+        responseType: "blob",
+        headers: {
+          "Content-Type": "text/csv",
+          Accept: "text/csv",
+        },
+      });
+      const url = window.URL || window.webkitURL;
+      const link = url.createObjectURL(blob);
+      const aEl = document.createElement("a");
+      aEl.setAttribute(
+        "download",
+        `${this.dates[0]}_${this.dates[1]}_${this.country}.csv`
+      );
+      aEl.setAttribute("href", link);
+      document.body.appendChild(aEl);
+      aEl.click();
+      document.body.removeChild(aEl);
     },
   },
 };

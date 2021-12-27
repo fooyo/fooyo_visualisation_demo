@@ -29,73 +29,77 @@ const COLORS = [
 ];
 
 export default {
-  mounted() {
-    this.myChart = echarts.init(this.$refs.chart);
-    this.myChart.setOption({
-      tooltip: {
-        trigger: "item",
-      },
-      legend: {
-        bottom: "1%",
-        left: "center",
-        itemWidth: 6,
-        itemHeight: 6,
-        padding: 0,
-        icon: "circle",
-        textStyle: {
-          color: "rgba(0, 0, 0, 0.45)",
-          fontSize: 12,
+  props: ["items"],
+  watch: {
+    items() {
+      if (this.myChart) {
+        this.myChart.setOption(this.chartConfig);
+      }
+    },
+  },
+
+  computed: {
+    chartConfig() {
+      return {
+        tooltip: {
+          trigger: "item",
         },
-      },
-      series: [
-        {
-          type: "pie",
-          bottom: 40,
-          radius: ["50%", "90%"],
-          avoidLabelOverlap: false,
-          label: {
-            show: true,
-            position: "inside",
-            formatter: (data) => {
-              if (data.percent >= 10) {
-                return parseInt(data.percent) + "%";
-              }
-              return "";
-            },
-            color: "#fff",
+        legend: {
+          bottom: "1%",
+          left: "center",
+          itemWidth: 6,
+          itemHeight: 6,
+          padding: 0,
+          icon: "circle",
+          textStyle: {
+            color: "rgba(0, 0, 0, 0.45)",
             fontSize: 12,
           },
-          emphasis: {
+        },
+        series: [
+          {
+            type: "pie",
+            bottom: 52,
+            radius: ["55%", "90%"],
+            avoidLabelOverlap: false,
             label: {
               show: true,
-              fontSize: 12,
-              fontWeight: "bold",
-            },
-          },
-          labelLine: {
-            show: false,
-          },
-          data: [
-            { value: 1048, name: "Bag", itemStyle: { color: "#68ceb7" } },
-            { value: 735, name: "Bottle" },
-            { value: 580, name: "Wrapper" },
-            { value: 484, name: "Cig" },
-            { value: 300, name: "Packing" },
-            { value: 735, name: "Mask" },
-            { value: 580, name: "Glass" },
-            { value: 484, name: "Can" },
-            { value: 300, name: "Others" },
-          ].map((item, index) => {
-            return {
-              ...item,
-              itemStyle: {
-                color: COLORS[index],
+              position: "inside",
+              formatter: (data) => {
+                if (data.percent >= 10) {
+                  return parseInt(data.percent) + "%";
+                }
+                return "";
               },
-            };
-          }),
-        },
-      ],
-    });
+              color: "#fff",
+              fontSize: 12,
+            },
+            emphasis: {
+              label: {
+                show: true,
+                fontSize: 12,
+                fontWeight: "bold",
+              },
+            },
+            labelLine: {
+              show: false,
+            },
+            data: this.items.map((item, index) => {
+              return {
+                ...item,
+                itemStyle: {
+                  color: COLORS[index],
+                },
+              };
+            }),
+          },
+        ],
+      };
+    },
+  },
+  mounted() {
+    this.myChart = echarts.init(this.$refs.chart);
+    this.myChart.setOption(this.chartConfig);
 
     let timeout;
     window.addEventListener("resize", () => {
