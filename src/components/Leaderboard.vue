@@ -71,6 +71,10 @@
       <v-col cols="3">{{ item.distance | fdistance }}</v-col>
       <v-col cols="2">{{ item.time_in_minutes | ftime }}</v-col>
     </v-row>
+
+    <v-overlay absolute :value="loading" :opacity="0.3">
+      <v-progress-circular indeterminate color="primary"></v-progress-circular>
+    </v-overlay>
   </div>
 </template>
 <script>
@@ -89,6 +93,7 @@ export default {
       country: "Worldwide",
       users: [],
       teams: [],
+      loading: false,
     };
   },
   computed: {
@@ -123,21 +128,28 @@ export default {
       this.loadData();
     },
     async loadData() {
-      let params = {};
-      if (this.dates.length) {
-        params.start_date = this.dates[0];
-        params.end_date = this.dates[1];
-      }
+      try {
+        this.loading = true;
+        let params = {};
+        if (this.dates.length) {
+          params.start_date = this.dates[0];
+          params.end_date = this.dates[1];
+        }
 
-      if (this.country !== "Worldwide") {
-        params.country = this.country;
-      }
+        if (this.country !== "Worldwide") {
+          params.country = this.country;
+        }
 
-      const { data } = await request.get("/dashboards/leaderboard", {
-        params,
-      });
-      this.users = data.users;
-      this.teams = data.teams;
+        const { data } = await request.get("/dashboards/leaderboard", {
+          params,
+        });
+        this.users = data.users;
+        this.teams = data.teams;
+      } catch (error) {
+        console.log(error);
+      } finally {
+        this.loading = false;
+      }
     },
   },
 };
@@ -152,6 +164,8 @@ export default {
 }
 .lb-wrap {
   padding-bottom: 20px;
+  position: relative;
+
   ::v-deep {
     .v-tabs-slider-wrapper {
       display: flex;

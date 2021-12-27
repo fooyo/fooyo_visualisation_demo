@@ -9,6 +9,9 @@
     <v-col class="ms-col" cols="12">
       <statistics :stats="stats" />
     </v-col>
+    <v-overlay absolute :value="loading" :opacity="0.3">
+      <v-progress-circular indeterminate color="primary"></v-progress-circular>
+    </v-overlay>
   </v-row>
 </template>
 <script>
@@ -36,6 +39,7 @@ export default {
         total_strides: 0,
       },
       strides: [],
+      loading: false,
     };
   },
   mounted() {
@@ -47,11 +51,18 @@ export default {
       this.loadData();
     },
     async loadData() {
-      const { data } = await request.get("/dashboards/strides", {
-        params: this.config,
-      });
-      this.strides = data.strides;
-      this.stats = data.stats;
+      this.loading = true;
+      try {
+        const { data } = await request.get("/dashboards/strides", {
+          params: this.config,
+        });
+        this.strides = data.strides;
+        this.stats = data.stats;
+      } catch (error) {
+        console.log(error);
+      } finally {
+        this.loading = false;
+      }
     },
   },
 };
