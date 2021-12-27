@@ -67,9 +67,9 @@
     >
       <v-col cols="2">{{ index + 1 }}</v-col>
       <v-col cols="3">{{ item.name }}</v-col>
-      <v-col cols="2">{{ item.items_count }}</v-col>
-      <v-col cols="3">{{ item.distance }}</v-col>
-      <v-col cols="2">{{ item.time_in_minutes }}</v-col>
+      <v-col cols="2">{{ item.items_count | fcount }}</v-col>
+      <v-col cols="3">{{ item.distance | fdistance }}</v-col>
+      <v-col cols="2">{{ item.time_in_minutes | ftime }}</v-col>
     </v-row>
   </div>
 </template>

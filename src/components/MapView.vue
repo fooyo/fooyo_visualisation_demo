@@ -8,6 +8,7 @@
 <script>
 import { MarkerClusterer } from "@googlemaps/markerclusterer";
 import { getCenterOfBounds } from "geolib";
+import { formatThousand } from "../utils/common";
 
 const { google } = window;
 
@@ -114,7 +115,9 @@ export default {
             return new google.maps.Marker({
               position,
               icon: {
-                url: `data:image/svg+xml;base64,${getIcon(count)}`,
+                url: `data:image/svg+xml;base64,${getIcon(
+                  count < 1000 ? count : formatThousand(count)
+                )}`,
                 scaledSize: new google.maps.Size(58, 53),
                 anchor: new google.maps.Point(21, 50),
               },

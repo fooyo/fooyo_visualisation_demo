@@ -10,7 +10,7 @@
             :src="require('@/assets/home/number.svg')"
           />
           <span class="stat-label">Number of Strides</span>
-          <span class="stat-num">{{ stats.total_strides }}</span>
+          <span class="stat-num">{{ stats.total_strides | fcount }}</span>
         </v-row>
       </v-col>
       <v-col md="6" lg="4" sm="12" cols="12">
@@ -21,7 +21,7 @@
             :src="require('@/assets/home/loc.svg')"
           />
           <span class="stat-label">Total Distance</span>
-          <span class="stat-num">{{ stats.total_distance }}</span>
+          <span class="stat-num">{{ stats.total_distance | fdistance }}</span>
         </v-row>
       </v-col>
       <v-col md="6" lg="4" sm="12" cols="12">
@@ -32,7 +32,9 @@
             :src="require('@/assets/home/timer.svg')"
           />
           <span class="stat-label">Total Time</span>
-          <span class="stat-num">{{ stats.total_time_in_minutes }}</span>
+          <span class="stat-num">{{
+            stats.total_time_in_minutes | ftime
+          }}</span>
         </v-row>
       </v-col>
     </v-row>
