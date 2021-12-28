@@ -65,7 +65,7 @@ export default {
   }
 }
 .left-card {
-  // height: 100%;
+  height: 100%;
 }
 .h-col {
   padding: 10px !important;

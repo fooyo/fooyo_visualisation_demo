@@ -60,26 +60,35 @@
         </v-select>
       </v-col>
     </v-row>
-
-    <v-row no-gutters class="th">
-      <v-col cols="1">No.</v-col>
-      <v-col cols="4">Name</v-col>
-      <v-col cols="2">Items</v-col>
-      <v-col cols="3">Distance</v-col>
-      <v-col cols="2">Time</v-col>
-    </v-row>
-    <v-row
-      v-for="(item, index) in displayList"
-      :key="index"
-      no-gutters
-      class="tr"
-    >
-      <v-col cols="1">{{ index + 1 }}</v-col>
-      <v-col cols="4">{{ item.name }}</v-col>
-      <v-col cols="2">{{ item.items_count | fcount }}</v-col>
-      <v-col cols="3">{{ item.distance | fdistance }}</v-col>
-      <v-col cols="2">{{ item.time_in_minutes | ftime }}</v-col>
-    </v-row>
+    <div v-if="displayList.length" v-scroll class="overflow-y-scroll">
+      <v-row no-gutters class="th">
+        <v-col cols="1">No.</v-col>
+        <v-col cols="4">Name</v-col>
+        <v-col cols="2">Items</v-col>
+        <v-col cols="3">Distance</v-col>
+        <v-col cols="2">Time</v-col>
+      </v-row>
+      <v-row
+        v-for="(item, index) in displayList"
+        :key="index"
+        no-gutters
+        class="tr"
+      >
+        <v-col cols="1">{{ index + 1 }}</v-col>
+        <v-col cols="4">{{ item.name }}</v-col>
+        <v-col cols="2">{{ item.items_count | fcount }}</v-col>
+        <v-col cols="3">{{ item.distance | fdistance }}</v-col>
+        <v-col cols="2">{{ item.time_in_minutes | ftime }}</v-col>
+      </v-row>
+    </div>
+    <div v-else class="empty">
+      <v-img
+        max-height="150"
+        max-width="150"
+        :src="require('@/assets/home/empty.svg')"
+      />
+      <span>Sorry, there is no data yet</span>
+    </div>
 
     <v-overlay absolute :value="loading" :opacity="0.3">
       <v-progress-circular indeterminate color="primary"></v-progress-circular>
@@ -174,6 +183,7 @@ export default {
 .lb-wrap {
   padding-bottom: 20px;
   position: relative;
+  height: 100%;
 
   ::v-deep {
     .v-tabs-slider-wrapper {
@@ -295,6 +305,24 @@ export default {
       margin-top: 0;
       margin-bottom: 0;
     }
+  }
+}
+.overflow-y-scroll {
+  overflow-y: scroll;
+  max-height: 530px;
+  min-height: 530px;
+}
+.empty {
+  min-height: 530px;
+  max-height: 530px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  span {
+    font-size: 16px;
+    margin-top: 10px;
+    color: #838584;
   }
 }
 </style>

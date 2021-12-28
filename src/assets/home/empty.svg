@@ -1,0 +1,45 @@
+<svg width="150" height="150" viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs>
+        <linearGradient x1="50%" y1="100%" x2="50%" y2="0%" id="c">
+            <stop stop-color="#FFF" stop-opacity="0" offset="0%"/>
+            <stop stop-color="#FBFBFC" stop-opacity=".14" offset="41%"/>
+            <stop stop-color="#F5F6EC" stop-opacity=".603" offset="64.317%"/>
+            <stop stop-color="#E0E2D3" offset="100%"/>
+        </linearGradient>
+        <linearGradient x1="29.214%" y1="41.456%" x2="95.187%" y2="68.573%" id="d">
+            <stop stop-color="#F4F5EF" offset="0%"/>
+            <stop stop-color="#DBDDD1" offset="100%"/>
+        </linearGradient>
+        <linearGradient x1="31.018%" y1="30.252%" x2="91.265%" y2="92.93%" id="e">
+            <stop stop-color="#E8E9E0" offset="0%"/>
+            <stop stop-color="#EAECE0" offset="89%"/>
+            <stop stop-color="#DBDDD1" offset="100%"/>
+        </linearGradient>
+        <linearGradient x1="50%" y1="50%" x2="50%" y2="99.612%" id="f">
+            <stop stop-color="#F7F8EF" offset="0%"/>
+            <stop stop-color="#D7DCC4" offset="71.883%"/>
+            <stop stop-color="#CCCEC1" offset="100%"/>
+        </linearGradient>
+        <path id="a" d="M0 0h150v150H0z"/>
+    </defs>
+    <g fill="none" fill-rule="evenodd">
+        <mask id="b" fill="#fff">
+            <use xlink:href="#a"/>
+        </mask>
+        <g mask="url(#b)">
+            <ellipse fill="url(#c)" fill-rule="nonzero" cx="75" cy="145" rx="75" ry="27.5"/>
+            <g transform="translate(17.5)">
+                <path d="M100.323 106.3s19.574-6.672 19.574-24.069-27.7-28.2-27.7-28.2-39.162-5.117-39.162-22.837 18.01-20.352 18.01-20.352" stroke="#D8DCC4" stroke-width=".622" stroke-dasharray="2.467"/>
+                <path d="M107.986 25.784h-6.58c-4.222.017-7.64 3.419-7.653 7.618v6.779h21.887V33.4c-.013-4.198-3.431-7.6-7.654-7.617z" fill="url(#d)" fill-rule="nonzero"/>
+                <path d="M24.081 25.784c-4.223.017-7.641 3.419-7.654 7.618v88.602c-.017 4.199-3.439 7.597-7.662 7.61h83.904c4.222-.013 7.642-3.412 7.654-7.61V33.402c.017-4.2 3.438-7.6 7.663-7.618H24.08z" fill="url(#e)" fill-rule="nonzero"/>
+                <path d="M85.022 122.004v-6.794H1.111v6.779c.012 4.197 3.432 7.597 7.654 7.61h83.904c-4.213-.017-7.625-3.406-7.647-7.595z" fill="url(#f)" fill-rule="nonzero"/>
+                <rect fill="#FFF" fill-rule="nonzero" x="26.179" y="40.95" width="64.401" height="4.155" rx="1.662"/>
+                <rect fill="#FFF" fill-rule="nonzero" x="26.179" y="56.054" width="64.401" height="4.155" rx="1.662"/>
+                <path fill="#D3D7C3" fill-rule="nonzero" d="M73.56 15.358 71.17 4.578l26.136-2.754z"/>
+                <path fill="#EBECE4" fill-rule="nonzero" d="M97.305 1.824 76.586 7.087l-3.026 8.271z"/>
+                <path fill="#F7F9F0" fill-rule="nonzero" d="m84.349 12.604-7.763-5.517 20.719-5.263z"/>
+                <path fill="#F7F9F0" fill-rule="nonzero" d="m71.169 4.578-6.3-4.386 32.436 1.632z"/>
+            </g>
+        </g>
+    </g>
+</svg>
