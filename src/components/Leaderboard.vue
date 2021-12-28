@@ -29,22 +29,31 @@
           v-model="country"
           @change="emitChange"
           :items="countries"
-          menu-props="auto"
           label="Select"
           hide-details
+          class="country-select"
           single-line
+          :menu-props="{
+            bottom: true,
+            'nudge-left': 45,
+            'nudge-top': -5,
+            'offset-y': true,
+            'z-index': 1,
+          }"
         >
           <v-img
             slot="prepend"
             max-width="23"
-            max-height="23"
+            max-height="28"
+            height="28"
+            contain
             :src="require('@/assets/home/location.svg')"
           />
           <v-img
             slot="append"
             max-width="8"
-            max-height="24"
-            height="24"
+            max-height="28"
+            height="28"
             contain
             :src="require('@/assets/home/arrowdown.svg')"
           />
@@ -53,8 +62,8 @@
     </v-row>
 
     <v-row no-gutters class="th">
-      <v-col cols="2">No.</v-col>
-      <v-col cols="3">Name</v-col>
+      <v-col cols="1">No.</v-col>
+      <v-col cols="4">Name</v-col>
       <v-col cols="2">Items</v-col>
       <v-col cols="3">Distance</v-col>
       <v-col cols="2">Time</v-col>
@@ -65,8 +74,8 @@
       no-gutters
       class="tr"
     >
-      <v-col cols="2">{{ index + 1 }}</v-col>
-      <v-col cols="3">{{ item.name }}</v-col>
+      <v-col cols="1">{{ index + 1 }}</v-col>
+      <v-col cols="4">{{ item.name }}</v-col>
       <v-col cols="2">{{ item.items_count | fcount }}</v-col>
       <v-col cols="3">{{ item.distance | fdistance }}</v-col>
       <v-col cols="2">{{ item.time_in_minutes | ftime }}</v-col>
@@ -89,7 +98,7 @@ export default {
     return {
       tab: 0,
       tabItems: ["Individuals", "Groups"],
-      timeMode: "today",
+      timeMode: "week",
       country: "Worldwide",
       users: [],
       teams: [],
@@ -200,7 +209,7 @@ export default {
 }
 
 .lb-filter {
-  padding: 10px 20px;
+  padding: 10px 17px 10px 20px;
   background-color: #f4f5ef;
 
   ::v-deep {
@@ -211,6 +220,14 @@ export default {
     .v-input__slot::before,
     .v-input__slot::after {
       display: none;
+    }
+    .v-slide-group__content {
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+    .v-chip-group .v-chip {
+      margin-top: 0;
+      margin-bottom: 0;
     }
     .v-chip {
       height: 28px;
@@ -249,6 +266,35 @@ export default {
   }
   .col:first-child {
     font-weight: bold;
+  }
+}
+
+.country-select {
+  ::v-deep {
+    .v-input__slot {
+      min-height: 28px !important;
+      &::before,
+      &::after {
+        display: none;
+      }
+    }
+    .v-select__selection--comma {
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+    label {
+      top: 0;
+      height: 28px;
+      line-height: 28px;
+    }
+    .v-input__prepend-outer {
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+    .v-input__append-inner {
+      margin-top: 0;
+      margin-bottom: 0;
+    }
   }
 }
 </style>

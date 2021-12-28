@@ -1,5 +1,5 @@
 <template>
-  <v-row no-gutters>
+  <v-row no-gutters class="filter">
     <v-col cols="12">
       <v-row no-gutters>
         <v-col cols="12" sm="12" md="6" lg="5" xl="3">
@@ -41,8 +41,10 @@
               scrollable
             >
               <v-spacer></v-spacer>
-              <v-btn text color="primary" @click="menu = false"> Cancel </v-btn>
-              <v-btn text color="primary" @click="onConfirmDate"> OK </v-btn>
+              <v-btn class="btn-cancel" text @click="menu = false">
+                Cancel
+              </v-btn>
+              <v-btn class="btn-ok" text @click="onConfirmDate"> OK </v-btn>
             </v-date-picker>
           </v-menu>
         </v-col>
@@ -52,7 +54,13 @@
             full-width
             v-model="country"
             :items="countries"
-            menu-props="auto"
+            :menu-props="{
+              bottom: true,
+              'nudge-left': 45,
+              'nudge-top': -5,
+              'offset-y': true,
+              'z-index': 1,
+            }"
             label="Select"
             hide-details
             single-line
@@ -77,7 +85,7 @@
         </v-col>
 
         <v-spacer />
-        <v-btn
+        <!-- <v-btn
           @click="onDownload"
           elevation="0"
           class="download-btn"
@@ -90,7 +98,7 @@
             :src="require('@/assets/home/download.svg')"
           />
           Download Data
-        </v-btn>
+        </v-btn> -->
       </v-row>
     </v-col>
   </v-row>
@@ -103,7 +111,10 @@ export default {
   props: ["summary"],
   data() {
     return {
-      dates: [dayjs().format("YYYY-MM-DD"), dayjs().format("YYYY-MM-DD")],
+      dates: [
+        dayjs().subtract(30, "day").format("YYYY-MM-DD"),
+        dayjs().format("YYYY-MM-DD"),
+      ],
       menu: false,
       country: "Worldwide",
     };
@@ -159,7 +170,47 @@ export default {
   },
 };
 </script>
+<style lang="scss">
+.v-menu__content {
+  border-radius: 10px;
+}
+.v-date-picker-table .v-btn.v-btn--active {
+  background: linear-gradient(
+    to right,
+    #dff15a,
+    rgba(198, 238, 142, 1)
+  ) !important;
+  color: #163223 !important;
+  font-weight: bold;
+  border-color: transparent !important;
+  &::before {
+    background-color: transparent;
+  }
+}
+
+.v-select-list {
+  padding: 0;
+}
+.v-select-list .v-list-item--highlighted {
+  background: linear-gradient(
+    to right,
+    #dff15a,
+    rgba(198, 238, 142, 1)
+  ) !important;
+  .v-list-item__title {
+    color: #163223 !important;
+    font-weight: bold;
+  }
+}
+</style>
 <style lang="scss" scoped>
+.btn-cancel {
+  text-transform: none;
+  color: #8c8c8c;
+}
+.btn-ok {
+  text-transform: none;
+}
 .download-btn {
   text-transform: none;
   margin-left: 40px;
@@ -204,6 +255,7 @@ export default {
     }
   }
 }
+
 .country-select {
   padding-top: 0;
   margin-top: 0;

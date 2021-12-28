@@ -25,11 +25,10 @@ export default {
   components: { Statistics, MapView, FilterBar },
   props: ["summary"],
   data() {
-    const initDate = dayjs().format("YYYY-MM-DD");
     return {
       config: {
-        start_date: initDate,
-        end_date: initDate,
+        start_date: dayjs().subtract(30, "day").format("YYYY-MM-DD"),
+        end_date: dayjs().format("YYYY-MM-DD"),
         country: "",
       },
       stats: {
