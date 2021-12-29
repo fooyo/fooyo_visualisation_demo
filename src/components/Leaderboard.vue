@@ -107,7 +107,7 @@ export default {
     return {
       tab: 0,
       tabItems: ["Individuals", "Groups"],
-      timeMode: "week",
+      timeMode: "all",
       country: "Worldwide",
       users: [],
       teams: [],
