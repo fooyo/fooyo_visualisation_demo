@@ -2,18 +2,31 @@
   <div class="stat-wrap">
     <div class="stat-title">Stridy Statistics</div>
     <v-row class="stat-head" align="center" no-gutters>
-      <v-col md="6" lg="4" sm="12" cols="12">
+      <v-col md="6" lg="3" sm="12" cols="12">
+        <v-row justify="center" align="center" no-gutters>
+          <v-img
+            max-height="30"
+            max-width="30"
+            :src="require('@/assets/home/face.svg')"
+          />
+          <span class="stat-label">Number of Strides</span>
+          <span class="stat-num">{{ stats.total_strides | fcount }}</span>
+        </v-row>
+      </v-col>
+      <v-col md="6" lg="3" sm="12" cols="12">
         <v-row justify="center" align="center" no-gutters>
           <v-img
             max-height="30"
             max-width="30"
             :src="require('@/assets/home/number.svg')"
           />
-          <span class="stat-label">Number of Strides</span>
-          <span class="stat-num">{{ stats.total_strides | fcount }}</span>
+          <span class="stat-label">Total Items Picked</span>
+          <span class="stat-num">
+            {{ stats.total_items_picked_up | fcount }}
+          </span>
         </v-row>
       </v-col>
-      <v-col md="6" lg="4" sm="12" cols="12">
+      <v-col md="6" lg="3" sm="12" cols="12">
         <v-row justify="center" align="center" no-gutters>
           <v-img
             max-height="30"
@@ -24,7 +37,7 @@
           <span class="stat-num">{{ stats.total_distance | fdistance }}</span>
         </v-row>
       </v-col>
-      <v-col md="6" lg="4" sm="12" cols="12">
+      <v-col md="6" lg="3" sm="12" cols="12">
         <v-row justify="center" align="center" no-gutters>
           <v-img
             max-height="30"
@@ -159,6 +172,12 @@ export default {
         transform: translateY(-50%) scaleX(0.5);
       }
     }
+  }
+  .stat-label {
+    font-size: 12px;
+  }
+  .stat-num {
+    font-size: 14px;
   }
 }
 .stat-label {

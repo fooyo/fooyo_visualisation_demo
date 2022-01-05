@@ -10,7 +10,7 @@
           :src="require('@/assets/home/leaf.svg')"
         />
         <span class="cs-title">{{ summary.total_users }}</span>
-        <span class="cs-caption">No. of Users Worldwide</span>
+        <span class="cs-caption">No. of Striders Worldwide</span>
       </v-row>
     </v-col>
     <v-col class="col" md="6" xl="6" sm="12" cols="12">

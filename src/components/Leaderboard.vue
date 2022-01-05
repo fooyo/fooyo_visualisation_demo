@@ -6,7 +6,7 @@
       </v-col>
       <v-spacer />
       <v-col cols="auto">
-        <v-tabs height="24" v-model="tab">
+        <v-tabs @change="emitChange" height="24" v-model="tab">
           <v-tabs-slider color="#DFF15A"></v-tabs-slider>
           <v-tab v-for="item in tabItems" :key="item">
             {{ item }}
@@ -23,7 +23,7 @@
         </v-chip-group>
       </v-col>
       <v-spacer></v-spacer>
-      <v-col cols="4">
+      <v-col v-if="tab === 0" cols="4">
         <v-select
           full-width
           v-model="country"
@@ -154,7 +154,7 @@ export default {
           params.end_date = this.dates[1];
         }
 
-        if (this.country !== "Worldwide") {
+        if (this.country !== "Worldwide" && this.tab === 0) {
           params.country = this.country;
         }
 

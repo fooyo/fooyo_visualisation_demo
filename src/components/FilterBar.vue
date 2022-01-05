@@ -44,7 +44,7 @@
               <v-btn class="btn-cancel" text @click="menu = false">
                 Cancel
               </v-btn>
-              <v-btn class="btn-ok" text @click="onConfirmDate"> OK </v-btn>
+              <v-btn class="btn-ok" text @click="onConfirmDate"> Apply </v-btn>
             </v-date-picker>
           </v-menu>
         </v-col>
