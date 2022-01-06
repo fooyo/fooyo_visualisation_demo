@@ -52,7 +52,7 @@
       </v-col>
     </v-row>
     <v-row no-gutters class="bottom-wrap">
-      <v-col cols="12" sm="12" md="4" lg="5" xl="5">
+      <v-col cols="12" sm="12" md="4" lg="4" xl="5">
         <v-row align="center" justify="center">
           <pie-chart :items="stats.total_items" />
         </v-row>
@@ -64,7 +64,7 @@
         cols="12"
         sm="12"
         md="8"
-        lg="7"
+        lg="8"
         xl="7"
       >
         <v-row no-gutters>
@@ -190,7 +190,7 @@ export default {
   font-weight: 500;
 }
 .stat-item {
-  padding: 0 45px;
+  padding: 0 35px;
   margin-top: 28px;
 
   &:first-child {

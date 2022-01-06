@@ -7,7 +7,7 @@
           max-width="52"
           height="92"
           max-height="92"
-          :src="require('@/assets/home/leaf.svg')"
+          :src="require('@/assets/home/user.svg')"
         />
         <span class="cs-title">{{ summary.total_users }}</span>
         <span class="cs-caption">No. of Striders Worldwide</span>
