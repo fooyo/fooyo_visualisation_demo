@@ -6,7 +6,7 @@ const request = axios.create({
     Accept: "application/json",
     "Content-Type": "application/json",
   },
-  timeout: 5000,
+  timeout: 30 * 1000,
   validateStatus(status) {
     return status >= 200 && status < 300;
   },

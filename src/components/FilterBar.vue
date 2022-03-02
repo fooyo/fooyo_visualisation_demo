@@ -2,7 +2,7 @@
   <v-row no-gutters class="filter">
     <v-col cols="12">
       <v-row no-gutters>
-        <v-col cols="12" sm="12" md="6" lg="5" xl="3">
+        <v-col cols="12" sm="12" md="6" lg="4" xl="3">
           <v-menu
             ref="menu"
             v-model="menu"
@@ -49,7 +49,7 @@
           </v-menu>
         </v-col>
 
-        <v-col cols="12" sm="12" md="4" xl="2" lg="3">
+        <v-col cols="12" sm="12" md="4" lg="3" xl="2">
           <v-select
             full-width
             v-model="country"
@@ -84,7 +84,25 @@
           </v-select>
         </v-col>
 
-        <v-spacer />
+        <v-col cols="12" sm="12" md="12" lg="5" xl="7">
+          <v-row
+            class="tab-row"
+            align-content="center"
+            no-gutters
+            justify-lg="end"
+            style="height: 40px"
+            justify-xl="end"
+          >
+            <div style="height: 30px">
+              <v-tabs optional @change="onTabChange" v-model="tab" height="30">
+                <v-tabs-slider color="#DFF15A"></v-tabs-slider>
+                <v-tab v-for="(item, index) in tabItems" :key="index">
+                  {{ item }}
+                </v-tab>
+              </v-tabs>
+            </div>
+          </v-row>
+        </v-col>
         <!-- <v-btn
           @click="onDownload"
           elevation="0"
@@ -117,6 +135,8 @@ export default {
       ],
       menu: false,
       country: "Worldwide",
+      tab: undefined,
+      tabItems: ["This week", "This month", "This year", "All time"],
     };
   },
   computed: {
@@ -132,9 +152,33 @@ export default {
       if (this.dates.length === 1) {
         this.dates.push(this.dates[0]);
       }
+      this.tab = undefined;
       this.emitChange();
       this.$refs.menu.save(this.dates);
     },
+
+    onTabChange(tabValue) {
+      if (tabValue === undefined) {
+        return;
+      }
+
+      let params = {};
+      if (tabValue === 0) {
+        params.start_date = dayjs().isoWeekday(1).format("YYYY-MM-DD");
+        params.end_date = dayjs().isoWeekday(7).format("YYYY-MM-DD");
+      } else if (tabValue === 1) {
+        params.start_date = dayjs().startOf("month").format("YYYY-MM-DD");
+        params.end_date = dayjs().endOf("month").format("YYYY-MM-DD");
+      } else if (tabValue === 2) {
+        params.start_date = dayjs().startOf("year").format("YYYY-MM-DD");
+        params.end_date = dayjs().endOf("year").format("YYYY-MM-DD");
+      }
+      this.$emit("change", {
+        ...params,
+        country: this.country !== "Worldwide" ? this.country : "",
+      });
+    },
+
     emitChange() {
       this.$emit("change", {
         start_date: this.dates[0],
@@ -278,6 +322,41 @@ export default {
     }
     .v-input__append-inner {
       margin-top: 0;
+    }
+  }
+}
+
+.filter {
+  ::v-deep {
+    .v-tabs-slider-wrapper {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+    }
+    .v-tabs-slider {
+      width: 20px;
+      background: linear-gradient(
+        to right,
+        #dff15a,
+        rgba(198, 238, 142, 1)
+      ) !important;
+    }
+
+    .v-tab {
+      text-transform: none;
+      font-size: 14px;
+      padding: 0 8px;
+      min-width: auto;
+      letter-spacing: 0;
+    }
+
+    .v-tabs .v-tabs-bar .v-tab:not(.v-tab--active) {
+      color: #838584;
+    }
+
+    .v-tab--active {
+      color: #163223;
     }
   }
 }
