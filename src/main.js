@@ -23,6 +23,14 @@ Vue.filter("ftime", (value) => {
   return formatTimeUnit(value);
 });
 
+Vue.filter("fcommasNumber", (value) => {
+  return value.toLocaleString("en", { useGrouping: true });
+});
+
+Vue.filter("fweight", (value) => {
+  return formatThousand(value) + "kg";
+});
+
 new Vue({
   router,
   store,

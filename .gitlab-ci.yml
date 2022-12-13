@@ -1,0 +1,63 @@
+default:
+  image: node:16.13.0-alpine
+  before_script:
+    - apk update && apk add openssh-client rsync
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - ssh-keyscan -H $SSH_HOST_KEY > ~/.ssh/known_hosts
+    - npm i
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - .npm/
+
+deploy_staging:
+  variables:
+    DEST_FOLDER: dist_$CI_PIPELINE_CREATED_AT
+    SSH_USER: ubuntu
+    SSH_HOST_KEY: '152.67.97.126'
+    SSH_PRIVATE_KEY: |
+      -----BEGIN OPENSSH PRIVATE KEY-----
+      b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW
+      QyNTUxOQAAACBp8swbnOxGUFF73jPKjaWXvAm1GXfDfLI1W4TMjOZoeAAAAKC3gPcwt4D3
+      MAAAAAtzc2gtZWQyNTUxOQAAACBp8swbnOxGUFF73jPKjaWXvAm1GXfDfLI1W4TMjOZoeA
+      AAAEAgjrT6lRMruL378jf0QOkTwDwszDVPawDhLzMq8X8CEWnyzBuc7EZQUXveM8qNpZe8
+      CbUZd8N8sjVbhMyM5mh4AAAAF2tlbi5kaW5nLndvcmtAZ21haWwuY29tAQIDBAUG
+      -----END OPENSSH PRIVATE KEY-----
+  stage: deploy
+  script:
+    - npm run build:staging
+    - rsync -atv --delete --progress ./dist/ $SSH_USER@$SSH_HOST_KEY:"/home/ubuntu/staging-stridy-dashboard/${DEST_FOLDER}"
+    - ssh $SSH_USER@$SSH_HOST_KEY "cd /home/ubuntu/staging-stridy-dashboard; ln -sfn $DEST_FOLDER dist"
+  environment: production
+  when: manual
+  only:
+    refs:
+      - staging
+
+deploy_production:
+  variables:
+    DEST_FOLDER: dist_$CI_PIPELINE_CREATED_AT
+    SSH_USER: ubuntu
+    SSH_HOST_KEY: api.stridy.com
+    SSH_PRIVATE_KEY: |
+      -----BEGIN OPENSSH PRIVATE KEY-----
+      b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW
+      QyNTUxOQAAACCoaN0VOSCQPJufUBBUcU7n6Jae4Og46bbLwr/PcwAuygAAAKh/CYvefwmL
+      3gAAAAtzc2gtZWQyNTUxOQAAACCoaN0VOSCQPJufUBBUcU7n6Jae4Og46bbLwr/PcwAuyg
+      AAAEDgzmeJXGUs+JMJCu58fshcHsH02OD4sUpYihdNlIa9x6ho3RU5IJA8m59QEFRxTufo
+      lp7g6DjptsvCv89zAC7KAAAAInN0cmlkeV9kYXNoYm9hcmRfZGVwbG95QGdpdGxhYi5jb2
+      0BAgM=
+      -----END OPENSSH PRIVATE KEY-----
+  stage: deploy
+  script:
+    - npm run build
+    - rsync -atv --delete --progress ./dist/ $SSH_USER@$SSH_HOST_KEY:"/home/ubuntu/apps/stridy_dashboard/${DEST_FOLDER}"
+    - ssh $SSH_USER@$SSH_HOST_KEY "cd /home/ubuntu/apps/stridy_dashboard; ln -sfn $DEST_FOLDER dist"
+  environment: production
+  when: manual
+  only:
+    refs:
+      - master

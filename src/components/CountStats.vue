@@ -9,7 +9,7 @@
           max-height="92"
           :src="require('@/assets/home/user.svg')"
         />
-        <span class="cs-title">{{ summary.total_users }}</span>
+        <span class="cs-title">{{ usersCount }}</span>
         <span class="cs-caption">No. of Striders Worldwide</span>
       </v-row>
     </v-col>
@@ -22,15 +22,31 @@
           height="92"
           :src="require('@/assets/home/world.svg')"
         />
-        <span class="cs-title">{{ summary.total_countries }}</span>
+        <span class="cs-title">{{ countriesCount }}</span>
         <span class="cs-caption">No. of Countries</span>
       </v-row>
     </v-col>
   </v-row>
 </template>
 <script>
+import { mapState } from "vuex";
+
 export default {
-  props: ["summary"],
+  computed: {
+    ...mapState([
+      "totalUsers",
+      "totalCountries",
+      "stridesUsers",
+      "stridesCountries",
+      "team",
+    ]),
+    usersCount() {
+      return this.team ? this.stridesUsers : this.totalUsers;
+    },
+    countriesCount() {
+      return this.team ? this.stridesCountries : this.totalCountries;
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>

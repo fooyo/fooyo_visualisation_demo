@@ -2,62 +2,16 @@
   <div class="lb-wrap">
     <v-row no-gutters class="lb-bar">
       <v-col cols="auto">
-        <span class="lb-title">Stridy Leaderboard</span>
+        <span class="lb-title">{{ title }}</span>
       </v-col>
       <v-spacer />
-      <v-col cols="auto">
+      <v-col cols="auto" v-if="!team">
         <v-tabs @change="emitChange" height="24" v-model="tab">
           <v-tabs-slider color="#DFF15A"></v-tabs-slider>
           <v-tab v-for="item in tabItems" :key="item">
             {{ item }}
           </v-tab>
         </v-tabs>
-      </v-col>
-    </v-row>
-    <v-row align="center" no-gutters class="lb-filter">
-      <v-col cols="auto">
-        <v-chip-group @change="emitChange" v-model="timeMode" mandatory>
-          <v-chip value="today"> Today </v-chip>
-          <v-chip value="week"> This week </v-chip>
-          <v-chip value="all"> All time </v-chip>
-        </v-chip-group>
-      </v-col>
-      <v-spacer></v-spacer>
-      <v-col v-if="tab === 0" cols="4">
-        <v-select
-          full-width
-          v-model="country"
-          @change="emitChange"
-          :items="countries"
-          label="Select"
-          hide-details
-          class="country-select"
-          single-line
-          :menu-props="{
-            bottom: true,
-            'nudge-left': 45,
-            'nudge-top': -5,
-            'offset-y': true,
-            'z-index': 1,
-          }"
-        >
-          <v-img
-            slot="prepend"
-            max-width="23"
-            max-height="28"
-            height="28"
-            contain
-            :src="require('@/assets/home/location.svg')"
-          />
-          <v-img
-            slot="append"
-            max-width="8"
-            max-height="28"
-            height="28"
-            contain
-            :src="require('@/assets/home/arrowdown.svg')"
-          />
-        </v-select>
       </v-col>
     </v-row>
     <div v-if="displayList.length" v-scroll class="overflow-y-scroll">
@@ -96,46 +50,47 @@
   </div>
 </template>
 <script>
-import dayjs from "dayjs";
-import isoWeek from "dayjs/plugin/isoWeek";
-dayjs.extend(isoWeek);
 import request from "../utils/request";
+import { mapState } from "vuex";
 
 export default {
-  props: ["summary"],
   data() {
     return {
       tab: 0,
-      tabItems: ["Individuals", "Groups"],
+      tabItems: ["Individuals", "Teams"],
       timeMode: "all",
-      country: "Worldwide",
       users: [],
       teams: [],
       loading: false,
     };
   },
   computed: {
+    title() {
+      if (this.team) {
+        return "Team Leaderboard";
+      } else {
+        return "Stridy Leaderboard";
+      }
+    },
     displayList() {
       if (this.tab === 0) {
         return this.users;
       }
       return this.teams;
     },
-    countries() {
-      return ["Worldwide"].concat(this.summary.countries);
+    ...mapState(["startDay", "endDay", "country", "team"]),
+    filterConditions() {
+      return [this.startDay, this.endDay, this.country, this.team].join();
     },
-    dates() {
-      if (this.timeMode === "today") {
-        let date = dayjs().format("YYYY-MM-DD");
-        return [date, date];
+  },
+  watch: {
+    team(newTeamId) {
+      if (newTeamId) {
+        this.tab = 0;
       }
-      if (this.timeMode === "week") {
-        return [
-          dayjs().isoWeekday(1).format("YYYY-MM-DD"),
-          dayjs().isoWeekday(7).format("YYYY-MM-DD"),
-        ];
-      }
-      return [];
+    },
+    filterConditions() {
+      this.loadData();
     },
   },
   mounted() {
@@ -148,14 +103,13 @@ export default {
     async loadData() {
       try {
         this.loading = true;
-        let params = {};
-        if (this.dates.length) {
-          params.start_date = this.dates[0];
-          params.end_date = this.dates[1];
-        }
-
-        if (this.country !== "Worldwide" && this.tab === 0) {
-          params.country = this.country;
+        let params = {
+          country: this.country,
+          team: this.team,
+        };
+        if (this.startDay && this.endDay) {
+          params.start_date = this.startDay;
+          params.end_date = this.endDay;
         }
 
         const { data } = await request.get("/dashboards/leaderboard", {

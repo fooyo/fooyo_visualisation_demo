@@ -7,8 +7,9 @@
 </template>
 <script>
 import { MarkerClusterer } from "@googlemaps/markerclusterer";
-import { getCenterOfBounds } from "geolib";
+import { getCenter } from "geolib";
 import { formatThousand } from "../utils/common";
+import { mapState } from "vuex";
 
 const { google } = window;
 
@@ -39,6 +40,9 @@ const getIcon = (count) => {
   `);
 };
 
+const ORIGINAL_ZOOM_SCALE = 2;
+const SINGAPORE_ZOOM_SCALE = 11;
+
 export default {
   props: ["locations"],
   data() {
@@ -47,8 +51,14 @@ export default {
   mounted() {
     this.handleMap();
   },
+  computed: {
+    ...mapState(["country"]),
+    filterConditions() {
+      return [this.country, this.locations].join();
+    },
+  },
   watch: {
-    locations() {
+    filterConditions() {
       this.handleMap();
     },
   },
@@ -56,17 +66,20 @@ export default {
     handleMap() {
       if (!this.map) {
         this.map = new google.maps.Map(this.$refs.map, {
-          zoom: 1,
+          zoom: ORIGINAL_ZOOM_SCALE,
         });
       }
-      if (this.locations.length) {
-        const centerBound = getCenterOfBounds(this.locations);
+
+      if (this.country) {
+        const centerBound = getCenter(this.locations);
         this.map.setCenter({
           lat: centerBound.latitude,
           lng: centerBound.longitude,
         });
+        this.map.setZoom(SINGAPORE_ZOOM_SCALE);
       } else {
         this.map.setCenter(DEFAULT_COORDS);
+        this.map.setZoom(ORIGINAL_ZOOM_SCALE);
       }
       // const infoWindow = new google.maps.InfoWindow({
       //   content: "",
@@ -102,7 +115,6 @@ export default {
 
       if (this.cluster) {
         this.cluster.setMap(null);
-        this.map.setZoom(1);
       }
 
       // Add a marker clusterer to manage the markers.

@@ -1,7 +1,7 @@
 <template>
   <v-row no-gutters class="ms-wrap">
     <v-col class="ms-col" cols="12">
-      <filter-bar @change="onChange" :summary="summary" />
+      <filter-bar :summary="summary" />
     </v-col>
     <v-col class="ms-col" cols="12">
       <map-view :locations="strides" />
@@ -19,18 +19,13 @@ import FilterBar from "./FilterBar.vue";
 import MapView from "./MapView.vue";
 import Statistics from "./Statistics.vue";
 import request from "../utils/request";
-import dayjs from "dayjs";
+import { mapActions, mapState } from "vuex";
 
 export default {
   components: { Statistics, MapView, FilterBar },
   props: ["summary"],
   data() {
     return {
-      config: {
-        start_date: dayjs().subtract(30, "day").format("YYYY-MM-DD"),
-        end_date: dayjs().format("YYYY-MM-DD"),
-        country: "",
-      },
       stats: {
         total_distance: 0,
         total_items: [],
@@ -44,19 +39,41 @@ export default {
   mounted() {
     this.loadData();
   },
-  methods: {
-    onChange(config) {
-      this.config = config;
+  computed: {
+    ...mapState(["startDay", "endDay", "country", "team"]),
+    filterConditions() {
+      return [this.startDay, this.endDay, this.country, this.team].join();
+    },
+  },
+  watch: {
+    filterConditions() {
       this.loadData();
     },
+  },
+  methods: {
+    ...mapActions([
+      "updateStartDay",
+      "updateEndDay",
+      "updateCountry",
+      "updateStridesUsers",
+      "updateStridesCountries",
+    ]),
     async loadData() {
       this.loading = true;
+      const params = {
+        start_date: this.startDay,
+        end_date: this.endDay,
+        country: this.country,
+        team: this.team,
+      };
       try {
         const { data } = await request.get("/dashboards/strides", {
-          params: this.config,
+          params: params,
         });
         this.strides = data.strides;
         this.stats = data.stats;
+        this.updateStridesUsers(data.stats.strides_users);
+        this.updateStridesCountries(data.stats.strides_countries);
       } catch (error) {
         console.log(error);
       } finally {

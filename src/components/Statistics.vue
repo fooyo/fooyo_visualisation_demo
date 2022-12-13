@@ -1,58 +1,59 @@
 <template>
   <div class="stat-wrap">
     <div class="stat-title">Stridy Statistics</div>
-    <v-row class="stat-head" align="center" no-gutters>
-      <v-col md="6" lg="3" sm="12" cols="12">
-        <v-row justify="center" align="center" no-gutters>
-          <v-img
-            max-height="30"
-            max-width="30"
-            :src="require('@/assets/home/face.svg')"
-          />
-          <span class="stat-label">Number of Strides</span>
-          <span class="stat-num">{{ stats.total_strides | fcount }}</span>
-        </v-row>
-      </v-col>
-      <v-col md="6" lg="3" sm="12" cols="12">
-        <v-row justify="center" align="center" no-gutters>
-          <v-img
-            max-height="30"
-            max-width="30"
-            :src="require('@/assets/home/number.svg')"
-          />
-          <span class="stat-label">Total Items Picked</span>
-          <span class="stat-num">
-            {{ stats.total_items_picked_up | fcount }}
-          </span>
-        </v-row>
-      </v-col>
-      <v-col md="6" lg="3" sm="12" cols="12">
-        <v-row justify="center" align="center" no-gutters>
-          <v-img
-            max-height="30"
-            max-width="30"
-            :src="require('@/assets/home/loc.svg')"
-          />
-          <span class="stat-label">Total Distance</span>
-          <span class="stat-num">{{ stats.total_distance | fdistance }}</span>
-        </v-row>
-      </v-col>
-      <v-col md="6" lg="3" sm="12" cols="12">
-        <v-row justify="center" align="center" no-gutters>
-          <v-img
-            max-height="30"
-            max-width="30"
-            :src="require('@/assets/home/timer.svg')"
-          />
-          <span class="stat-label">Total Time</span>
-          <span class="stat-num">{{
-            stats.total_time_in_minutes | ftime
-          }}</span>
-        </v-row>
-      </v-col>
+    <v-row class="stat-head" align="center" justify="space-around" no-gutters>
+      <v-row justify="center" align="center" no-gutters>
+        <v-img
+          max-height="30"
+          max-width="30"
+          :src="require('@/assets/home/face.svg')"
+        />
+        <span class="stat-label">Strides</span>
+        <span class="stat-num">{{ stats.total_strides | fcount }}</span>
+      </v-row>
+      <v-row justify="center" align="center" no-gutters>
+        <v-img
+          max-height="30"
+          max-width="30"
+          :src="require('@/assets/home/number.svg')"
+        />
+        <span class="stat-label">Items</span>
+        <span class="stat-num">
+          {{ stats.total_items_picked_up | fcount }}
+        </span>
+      </v-row>
+      <v-row justify="center" align="center" no-gutters>
+        <v-img
+          max-height="30"
+          max-width="30"
+          :src="require('@/assets/home/weight.svg')"
+        />
+        <span class="stat-label">Weight</span>
+        <span class="stat-num">
+          {{ stats.total_weight | fweight }}
+        </span>
+      </v-row>
+      <v-row justify="center" align="center" no-gutters>
+        <v-img
+          max-height="30"
+          max-width="30"
+          :src="require('@/assets/home/loc.svg')"
+        />
+        <span class="stat-label">Distance</span>
+        <span class="stat-num">{{ stats.total_distance | fdistance }}</span>
+      </v-row>
+      <v-row justify="center" align="center" no-gutters>
+        <v-img
+          max-height="30"
+          max-width="30"
+          :src="require('@/assets/home/timer.svg')"
+        />
+        <span class="stat-label">Time</span>
+        <span class="stat-num">{{ stats.total_time_in_minutes | ftime }}</span>
+      </v-row>
     </v-row>
     <v-row no-gutters class="bottom-wrap">
-      <v-col cols="12" sm="12" md="4" lg="4" xl="5">
+      <v-col cols="12" sm="12" md="4" lg="3" xl="5">
         <v-row align="center" justify="center">
           <pie-chart :items="stats.total_items" />
         </v-row>
@@ -64,7 +65,7 @@
         cols="12"
         sm="12"
         md="8"
-        lg="8"
+        lg="9"
         xl="7"
       >
         <v-row no-gutters>
@@ -75,7 +76,6 @@
                 : '',
             ]"
             cols="12"
-            md="12"
             lg="6"
           >
             <v-row
@@ -85,6 +85,12 @@
               align="center"
               class="stat-item"
             >
+              <span
+                class="material-icon"
+                :style="{ color: materialColor(item.name) }"
+              >
+                •
+              </span>
               <v-img
                 max-height="30"
                 max-width="30"
@@ -93,12 +99,12 @@
                 contain
                 :src="item.image_url"
               />
-              <span class="stat-label">{{ item.name }}</span>
+              <span class="stat-label">{{ renameItem(item.name) }}</span>
               <v-spacer />
-              <span class="stat-num">{{ item.value }}</span>
+              <span class="stat-num">{{ item.value | fcommasNumber }}</span>
             </v-row>
           </v-col>
-          <v-col cols="12" md="12" lg="6">
+          <v-col cols="12" lg="6">
             <v-row
               v-for="(item, index) in stats.total_items.slice(6)"
               :key="index"
@@ -113,6 +119,12 @@
                   : '',
               ]"
             >
+              <span
+                class="material-icon"
+                :style="{ color: materialColor(item.name) }"
+              >
+                •
+              </span>
               <v-img
                 max-height="30"
                 max-width="30"
@@ -121,9 +133,9 @@
                 contain
                 :src="item.image_url"
               />
-              <span class="stat-label">{{ item.name }}</span>
+              <span class="stat-label">{{ renameItem(item.name) }}</span>
               <v-spacer />
-              <span class="stat-num">{{ item.value }}</span>
+              <span class="stat-num">{{ item.value | fcommasNumber }}</span>
             </v-row>
           </v-col>
         </v-row>
@@ -133,6 +145,8 @@
 </template>
 <script>
 import PieChart from "./PieChart.vue";
+import { MATERIAL_COLORS } from "../utils/constants";
+
 export default {
   props: ["stats"],
   components: {
@@ -143,9 +157,25 @@ export default {
       items: [{}, {}, {}, {}, {}, {}, {}, {}],
     };
   },
+  methods: {
+    renameItem(itemName) {
+      const items = itemName.split(" - ");
+      if (items.length === 1) {
+        return items[0];
+      }
+      return `${items[1]} [${items[0]}]`;
+    },
+    materialColor(itemName) {
+      return MATERIAL_COLORS[itemName];
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>
+.material-icon {
+  margin-right: 5px;
+  color: red;
+}
 .stat-title {
   font-size: 16px;
   font-weight: 500;
@@ -183,16 +213,15 @@ export default {
 .stat-label {
   font-size: 16px;
   margin-left: 5px;
-  margin-right: 22px;
+  margin-right: 5px;
 }
 .stat-num {
   font-size: 20px;
   font-weight: 500;
 }
 .stat-item {
-  padding: 0 35px;
+  padding: 0 10px 0 35px;
   margin-top: 28px;
-
   &:first-child {
     margin-top: 0;
   }

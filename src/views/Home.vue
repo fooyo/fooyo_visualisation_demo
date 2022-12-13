@@ -8,11 +8,11 @@
       </v-col>
       <v-col cols="12" class="h-col" sm="6" md="5" lg="4" xl="4">
         <v-card elevation="0">
-          <count-stats :summary="summary" />
+          <count-stats />
         </v-card>
         <div class="spacer"></div>
         <v-card elevation="0">
-          <leaderboard :summary="summary" />
+          <leaderboard />
         </v-card>
       </v-col>
     </v-row>
@@ -24,6 +24,7 @@ import CountStats from "../components/CountStats.vue";
 import Leaderboard from "../components/Leaderboard.vue";
 import LeftBoard from "../components/LeftBoard.vue";
 import request from "../utils/request";
+import { mapActions } from "vuex";
 
 export default {
   name: "Home",
@@ -45,9 +46,12 @@ export default {
     this.loadSummary();
   },
   methods: {
+    ...mapActions(["updateTotalUsers", "updateTotalCountries"]),
     async loadSummary() {
       const { data } = await request.get("/dashboards/summary");
       this.summary = data;
+      this.updateTotalUsers(data.total_users);
+      this.updateTotalCountries(data.total_countries);
     },
   },
 };
