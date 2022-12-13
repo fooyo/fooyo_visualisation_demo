@@ -2,7 +2,85 @@
   <v-row no-gutters class="filter">
     <v-col cols="12">
       <v-row no-gutters>
-        <v-col cols="12" sm="12" md="6" lg="4" xl="3">
+        <v-col v-if="!team" cols="12" sm="12" md="6" lg="3" xl="2">
+          <v-select
+            full-width
+            v-model="country"
+            :items="countries"
+            :menu-props="{
+              bottom: true,
+              'nudge-left': 45,
+              'nudge-top': -5,
+              'offset-y': true,
+              'z-index': 1,
+            }"
+            label="Select"
+            hide-details
+            single-line
+            @change="onCountryChange"
+            class="country-select dropdown-select"
+          >
+            <v-img
+              slot="prepend"
+              max-width="36"
+              max-height="36"
+              :src="require('@/assets/home/circleloc.svg')"
+            />
+            <v-img
+              slot="append"
+              max-width="24"
+              max-height="36"
+              height="36"
+              contain
+              :src="require('@/assets/home/circledown.svg')"
+            />
+          </v-select>
+        </v-col>
+
+        <v-col cols="12" sm="12" md="6" lg="3" xl="2">
+          <v-select
+            full-width
+            v-model="selectedTime"
+            :items="timeSelections"
+            :menu-props="{
+              bottom: true,
+              'nudge-left': 45,
+              'nudge-top': -5,
+              'offset-y': true,
+              'z-index': 1,
+            }"
+            label="Select"
+            hide-details
+            single-line
+            @change="onTimeSelectionChange"
+            class="dropdown-select"
+          >
+            <v-img
+              slot="prepend"
+              max-width="36"
+              max-height="36"
+              :src="require('@/assets/home/calendar.svg')"
+            />
+            <v-img
+              slot="append"
+              max-width="24"
+              max-height="36"
+              height="36"
+              contain
+              :src="require('@/assets/home/circledown.svg')"
+            />
+          </v-select>
+        </v-col>
+
+        <v-col
+          v-if="customDateRangeSelected"
+          class="custom-date-selection"
+          cols="12"
+          sm="12"
+          md="8"
+          lg="6"
+          xl="3"
+        >
           <v-menu
             ref="menu"
             v-model="menu"
@@ -41,150 +119,125 @@
               scrollable
             >
               <v-spacer></v-spacer>
-              <v-btn class="btn-cancel" text @click="menu = false">
+              <v-btn class="btn-cancel" text @click="onHideCustomDateSelection">
                 Cancel
               </v-btn>
               <v-btn class="btn-ok" text @click="onConfirmDate"> Apply </v-btn>
             </v-date-picker>
           </v-menu>
         </v-col>
-
-        <v-col cols="12" sm="12" md="4" lg="3" xl="2">
-          <v-select
-            full-width
-            v-model="country"
-            :items="countries"
-            :menu-props="{
-              bottom: true,
-              'nudge-left': 45,
-              'nudge-top': -5,
-              'offset-y': true,
-              'z-index': 1,
-            }"
-            label="Select"
-            hide-details
-            single-line
-            @change="emitChange"
-            class="country-select"
-          >
-            <v-img
-              slot="prepend"
-              max-width="36"
-              max-height="36"
-              :src="require('@/assets/home/circleloc.svg')"
-            />
-            <v-img
-              slot="append"
-              max-width="24"
-              max-height="36"
-              height="36"
-              contain
-              :src="require('@/assets/home/circledown.svg')"
-            />
-          </v-select>
-        </v-col>
-
-        <v-col cols="12" sm="12" md="12" lg="5" xl="7">
-          <v-row
-            class="tab-row"
-            align-content="center"
-            no-gutters
-            justify-lg="end"
-            style="height: 40px"
-            justify-xl="end"
-          >
-            <div style="height: 30px">
-              <v-tabs optional @change="onTabChange" v-model="tab" height="30">
-                <v-tabs-slider color="#DFF15A"></v-tabs-slider>
-                <v-tab v-for="(item, index) in tabItems" :key="index">
-                  {{ item }}
-                </v-tab>
-              </v-tabs>
-            </div>
-          </v-row>
-        </v-col>
-        <!-- <v-btn
-          @click="onDownload"
-          elevation="0"
-          class="download-btn"
-          :translate="false"
-        >
-          <v-img
-            max-width="12"
-            max-height="11"
-            class="download-icon"
-            :src="require('@/assets/home/download.svg')"
-          />
-          Download Data
-        </v-btn> -->
       </v-row>
     </v-col>
   </v-row>
 </template>
 <script>
 import dayjs from "dayjs";
+import isoWeek from "dayjs/plugin/isoWeek";
+dayjs.extend(isoWeek);
 import request from "../utils/request";
+import { mapState, mapActions } from "vuex";
+
+const TIME_SELECTIONS = [
+  "All Time",
+  "This Week",
+  "This Month",
+  "This Year",
+  "Custom",
+];
+
+const WORLDWIDE = "Worldwide";
 
 export default {
   props: ["summary"],
   data() {
     return {
-      dates: [
-        dayjs().subtract(30, "day").format("YYYY-MM-DD"),
-        dayjs().format("YYYY-MM-DD"),
-      ],
+      dates: [null, null],
       menu: false,
-      country: "Worldwide",
-      tab: undefined,
-      tabItems: ["This week", "This month", "This year", "All time"],
+      customDateRangeSelected: false,
+      country: WORLDWIDE,
+      timeSelections: TIME_SELECTIONS,
+      selectedTime: TIME_SELECTIONS[0],
+      cachedTimeSelected: null,
     };
   },
   computed: {
     dateRangeText() {
-      return this.dates.join("    ~    ");
+      if (this.dates[0] && this.dates[1]) {
+        return this.dates.join("    ~    ");
+      } else {
+        return "Please select a date range";
+      }
     },
     countries() {
-      return ["Worldwide"].concat(this.summary.countries);
+      return [WORLDWIDE].concat(this.summary.countries);
+    },
+    ...mapState(["team"]),
+  },
+  watch: {
+    team(newTeamId) {
+      if (newTeamId) {
+        this.country = WORLDWIDE;
+      }
+
+      this.updateCountry(null);
     },
   },
   methods: {
+    ...mapActions([
+      "updateStartDay",
+      "updateEndDay",
+      "updateCountry",
+      "updateStridesUsers",
+      "updateStridesCountries",
+    ]),
+    onHideCustomDateSelection() {
+      this.customDateRangeSelected = false;
+      this.selectedTime = this.cachedTimeSelected;
+      this.onTimeSelectionChange(this.selectedTime);
+    },
     onConfirmDate() {
       if (this.dates.length === 1) {
         this.dates.push(this.dates[0]);
       }
-      this.tab = undefined;
-      this.emitChange();
+      console.log("abc: ", this.dates);
+      this.updateStartDay(this.dates[0]);
+      this.updateEndDay(this.dates[1]);
       this.$refs.menu.save(this.dates);
     },
 
-    onTabChange(tabValue) {
-      if (tabValue === undefined) {
-        return;
+    onTimeSelectionChange(selectedTime) {
+      let startDay = null;
+      let endDay = null;
+      this.customDateRangeSelected = false;
+      switch (selectedTime) {
+        case "All Time":
+          break;
+        case "This Week":
+          startDay = dayjs().isoWeekday(1).format("YYYY-MM-DD");
+          endDay = dayjs().isoWeekday(7).format("YYYY-MM-DD");
+          break;
+        case "This Month":
+          startDay = dayjs().startOf("month").format("YYYY-MM-DD");
+          endDay = dayjs().endOf("month").format("YYYY-MM-DD");
+          break;
+        case "This Year":
+          startDay = dayjs().startOf("year").format("YYYY-MM-DD");
+          endDay = dayjs().endOf("year").format("YYYY-MM-DD");
+          break;
+        case "Custom":
+          this.customDateRangeSelected = true;
+          return;
       }
-
-      let params = {};
-      if (tabValue === 0) {
-        params.start_date = dayjs().isoWeekday(1).format("YYYY-MM-DD");
-        params.end_date = dayjs().isoWeekday(7).format("YYYY-MM-DD");
-      } else if (tabValue === 1) {
-        params.start_date = dayjs().startOf("month").format("YYYY-MM-DD");
-        params.end_date = dayjs().endOf("month").format("YYYY-MM-DD");
-      } else if (tabValue === 2) {
-        params.start_date = dayjs().startOf("year").format("YYYY-MM-DD");
-        params.end_date = dayjs().endOf("year").format("YYYY-MM-DD");
-      }
-      this.$emit("change", {
-        ...params,
-        country: this.country !== "Worldwide" ? this.country : "",
-      });
+      this.cachedTimeSelected = selectedTime;
+      console.log("startDay: ", startDay);
+      console.log("endDay: ", endDay);
+      this.updateStartDay(startDay);
+      this.updateEndDay(endDay);
     },
 
-    emitChange() {
-      this.$emit("change", {
-        start_date: this.dates[0],
-        end_date: this.dates[1],
-        country: this.country !== "Worldwide" ? this.country : "",
-      });
+    onCountryChange() {
+      const country = this.country === "Worldwide" ? null : this.country;
+      this.updateCountry(country);
     },
     async onDownload() {
       const { data: blob } = await request.get("/dashboards/strides", {
@@ -301,9 +354,17 @@ export default {
 }
 
 .country-select {
+  margin-right: 40px;
+}
+@media screen and (min-width: 1265px) {
+  .custom-date-selection .date-field {
+    padding-left: 40px;
+  }
+}
+.dropdown-select {
   padding-top: 0;
   margin-top: 0;
-  margin-left: 40px;
+
   ::v-deep {
     .v-input__slot {
       min-height: 36px;

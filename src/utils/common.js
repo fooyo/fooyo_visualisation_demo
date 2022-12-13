@@ -7,13 +7,15 @@ export const formatThousand = (distance) => {
 };
 
 export const formatTimeUnit = (value) => {
-  const hour = Math.floor(value / 60);
-  const minute = value - hour * 60;
-  if (hour && minute) {
-    return `${hour}h${minute}m`;
-  }
-  if (hour) {
-    return `${hour}h`;
-  }
-  return `${minute}m`;
+  const day = Math.floor(value / (60 * 24));
+  const hour = Math.floor((value % (60 * 24)) / 60);
+  const minute = value % 60;
+
+  const dayDisplay = day > 0 ? `${day}d` : "";
+  const hourDisplay = hour > 0 ? `${hour}h` : "";
+  const minuteDisplay = minute > 0 ? `${minute}m` : "";
+
+  return [dayDisplay, hourDisplay, minuteDisplay]
+    .filter((element) => element !== "")
+    .join(" ");
 };

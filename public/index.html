@@ -4,18 +4,17 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/16d30f_9fa35a3b4271490187450b067c0ad9ff%7Emv2.jpg/v1/fill/w_32%2Ch_32%2Clg_1%2Cusm_0.66_1.00_0.01/16d30f_9fa35a3b4271490187450b067c0ad9ff%7Emv2.jpg">  
-    <link rel="shortcut icon" href="https://static.wixstatic.com/media/16d30f_9fa35a3b4271490187450b067c0ad9ff%7Emv2.jpg/v1/fill/w_32%2Ch_32%2Clg_1%2Cusm_0.66_1.00_0.01/16d30f_9fa35a3b4271490187450b067c0ad9ff%7Emv2.jpg" type="image/jpeg">  
+    <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/16d30f_9fa35a3b4271490187450b067c0ad9ff%7Emv2.jpg/v1/fill/w_32%2Ch_32%2Clg_1%2Cusm_0.66_1.00_0.01/16d30f_9fa35a3b4271490187450b067c0ad9ff%7Emv2.jpg">
+    <link rel="shortcut icon" href="https://static.wixstatic.com/media/16d30f_9fa35a3b4271490187450b067c0ad9ff%7Emv2.jpg/v1/fill/w_32%2Ch_32%2Clg_1%2Cusm_0.66_1.00_0.01/16d30f_9fa35a3b4271490187450b067c0ad9ff%7Emv2.jpg" type="image/jpeg">
     <title><%= htmlWebpackPlugin.options.title %></title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@latest/css/materialdesignicons.min.css">
   </head>
   <body>
     <noscript>
       <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
     <div id="app"></div>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC-ZrdL4qSvvdMOUOOjZvwVJnRrhTffpZY&v=weekly"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=<%= htmlWebpackPlugin.options.GOOGLE_MAP_KEY %>&v=weekly"></script>
     <!-- built files will be auto injected -->
   </body>
 </html>

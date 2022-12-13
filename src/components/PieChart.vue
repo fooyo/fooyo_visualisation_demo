@@ -7,6 +7,7 @@ import { TooltipComponent, LegendComponent } from "echarts/components";
 import { PieChart } from "echarts/charts";
 import { LabelLayout } from "echarts/features";
 import { SVGRenderer } from "echarts/renderers";
+import { MATERIAL_COLORS } from "../utils/constants";
 
 echarts.use([
   TooltipComponent,
@@ -15,18 +16,6 @@ echarts.use([
   SVGRenderer,
   LabelLayout,
 ]);
-
-const COLORS = [
-  "#68ceb7",
-  "#e18576",
-  "#d0e344",
-  "#e9bd4c",
-  "#ee85c8",
-  "#5b8ff9",
-  "#5d28de",
-  "#667898",
-  "#799866",
-];
 
 export default {
   props: ["items"],
@@ -43,18 +32,6 @@ export default {
       return {
         tooltip: {
           trigger: "item",
-        },
-        legend: {
-          bottom: "1%",
-          left: "center",
-          itemWidth: 6,
-          itemHeight: 6,
-          padding: 0,
-          icon: "circle",
-          textStyle: {
-            color: "rgba(0, 0, 0, 0.45)",
-            fontSize: 12,
-          },
         },
         series: [
           {
@@ -84,11 +61,11 @@ export default {
             labelLine: {
               show: false,
             },
-            data: this.items.map((item, index) => {
+            data: this.items.map((item) => {
               return {
                 ...item,
                 itemStyle: {
-                  color: COLORS[index],
+                  color: MATERIAL_COLORS[item.name],
                 },
               };
             }),
@@ -116,6 +93,6 @@ export default {
 <style lang="scss" scoped>
 .chart {
   width: 100%;
-  height: 268px;
+  height: 450px;
 }
 </style>
