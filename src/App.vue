@@ -2,7 +2,7 @@
   <v-app>
     <v-app-bar fixed height="88" light app color="#fff" elevation="0">
       <v-row class="d-flex app-bar-content" justify="center" align="center">
-        <v-col xl="3" md="4" xs="12" cols="1">
+        <v-col class="m-hide" xl="3" md="4" xs="12" cols="1">
           <a href="https://www.stridy.com">
             <v-img
               max-width="50"
@@ -17,7 +17,7 @@
             >Community Impact Dashboard</v-toolbar-title
           >
         </v-col>
-        <v-col xl="3" md="4" xs="12" cols="1">
+        <v-col class="m-hide" xl="3" md="4" xs="12" cols="1">
           <team-filter></team-filter>
         </v-col>
       </v-row>
@@ -42,12 +42,23 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+@import "@/styles/mixins.scss";
+
+.m-hide {
+  @include mobile {
+    display: none;
+  }
+}
+
 .app-bar-content {
   width: 100%;
 }
 .title {
   font-weight: bold;
   font-size: 20px;
+  @include mobile {
+    font-size: 20px !important;
+  }
 }
 .sub-title {
   font-size: 16px;
