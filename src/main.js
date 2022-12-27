@@ -4,7 +4,11 @@ import App from "./App.vue";
 import router from "./router";
 import store from "./store";
 import vuetify from "./plugins/vuetify";
-import { formatThousand, formatTimeUnit } from "./utils/common";
+import {
+  formatThousand,
+  formatOneDecimal,
+  formatTimeUnit,
+} from "./utils/common";
 
 Vue.config.productionTip = false;
 
@@ -28,7 +32,7 @@ Vue.filter("fcommasNumber", (value) => {
 });
 
 Vue.filter("fweight", (value) => {
-  return formatThousand(value) + "kg";
+  return formatOneDecimal(value) + "kg";
 });
 
 new Vue({

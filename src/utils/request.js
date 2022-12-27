@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const request = axios.create({
-  baseURL: "https://api.stridy.com/v1",
+  baseURL: process.env.BACKEND_SERVER_URL,
   headers: {
     Accept: "application/json",
     "Content-Type": "application/json",
