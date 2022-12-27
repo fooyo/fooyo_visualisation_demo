@@ -7,7 +7,8 @@ export const formatThousand = (distance) => {
 };
 
 export const formatOneDecimal = (number) => {
-  return Math.round(number * 10) / 10;
+  const value = number || 0;
+  return Math.round(value * 10) / 10;
 };
 
 export const formatTimeUnit = (value) => {
