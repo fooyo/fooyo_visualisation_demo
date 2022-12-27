@@ -6,6 +6,10 @@ export const formatThousand = (distance) => {
   return num;
 };
 
+export const formatOneDecimal = (number) => {
+  return Math.round(number * 10) / 10;
+};
+
 export const formatTimeUnit = (value) => {
   const day = Math.floor(value / (60 * 24));
   const hour = Math.floor((value % (60 * 24)) / 60);
