@@ -124,12 +124,12 @@ export default {
         renderer: {
           // https://github.com/googlemaps/js-markerclusterer/blob/9bc185e802ef9f6ae8ca0faf79e539b1273d521e/src/renderer.ts#L68
           render: ({ count, position }) => {
+            const displayCount =
+              count < 1000 ? count : formatThousand(count) + "k";
             return new google.maps.Marker({
               position,
               icon: {
-                url: `data:image/svg+xml;base64,${getIcon(
-                  count < 1000 ? count : formatThousand(count)
-                )}`,
+                url: `data:image/svg+xml;base64,${getIcon(displayCount)}`,
                 scaledSize: new google.maps.Size(58, 53),
                 anchor: new google.maps.Point(21, 50),
               },
