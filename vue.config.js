@@ -1,3 +1,5 @@
+const path = require("path");
+
 module.exports = {
   transpileDependencies: ["vuetify"],
   chainWebpack: (config) => {
@@ -6,5 +8,12 @@ module.exports = {
       args[0].GOOGLE_MAP_KEY = process.env.GOOGLE_MAP_KEY;
       return args;
     });
+  },
+  configureWebpack: {
+    resolve: {
+      alias: {
+        "@": path.join(__dirname, "./src"),
+      },
+    },
   },
 };

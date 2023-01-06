@@ -1,6 +1,6 @@
 <template>
   <v-row no-gutters>
-    <v-col class="col" md="6" xl="6" sm="12" cols="12">
+    <v-col class="col" md="6" xl="6" sm="12" cols="6">
       <v-row no-gutters align="center" justify="center">
         <v-img
           contain
@@ -13,7 +13,7 @@
         <span class="cs-caption">No. of Striders Worldwide</span>
       </v-row>
     </v-col>
-    <v-col class="col" md="6" xl="6" sm="12" cols="12">
+    <v-col class="col" md="6" xl="6" sm="12" cols="6">
       <v-row no-gutters align="center" justify="center">
         <v-img
           contain

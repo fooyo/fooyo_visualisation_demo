@@ -172,6 +172,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+@import "@/styles/mixins.scss";
 .material-icon {
   margin-right: 5px;
   color: red;
@@ -184,6 +185,9 @@ export default {
   background-color: #f4f5ef;
   border-radius: 8px;
   margin-top: 15px;
+  @include mobile {
+    flex-direction: column;
+  }
   ::v-deep {
     .row {
       height: 60px;
@@ -222,6 +226,9 @@ export default {
 .stat-item {
   padding: 0 10px 0 35px;
   margin-top: 28px;
+  @include mobile {
+    padding-left: 10px;
+  }
   &:first-child {
     margin-top: 0;
   }
@@ -256,5 +263,8 @@ export default {
 }
 .chart-mt {
   margin-top: 50px;
+  @include mobile {
+    margin-top: -30px;
+  }
 }
 </style>

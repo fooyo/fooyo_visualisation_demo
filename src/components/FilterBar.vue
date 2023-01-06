@@ -301,6 +301,7 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
+@import "@/styles/mixins.scss";
 .btn-cancel {
   text-transform: none;
   color: #8c8c8c;
@@ -355,6 +356,9 @@ export default {
 
 .country-select {
   margin-right: 40px;
+  @include mobile {
+    margin-right: 0;
+  }
 }
 @media screen and (min-width: 1265px) {
   .custom-date-selection .date-field {
